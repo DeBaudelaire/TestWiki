@@ -1,5 +1,6 @@
 package Tests;
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
@@ -58,8 +59,14 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("the lion king");
-        SearchPageObject.waitForElementByTitleAndDescription("The Lion King", "1994 American animated film");
-        SearchPageObject.waitForElementByTitleAndDescription("The Lion King (2019 film)", "Photo-realistic computer-animated film");
-        SearchPageObject.waitForElementByTitleAndDescription("The Lion King: The Gift", "2019 soundtrack album by Beyoncé");
+        if ((Platform.getInstance().isAndroid()) || (Platform.getInstance().isIOS())) {
+            SearchPageObject.waitForElementByTitleAndDescription("The Lion King", "1994 American animated film");
+            SearchPageObject.waitForElementByTitleAndDescription("The Lion King (2019 film)", "Photo-realistic computer-animated film");
+            SearchPageObject.waitForElementByTitleAndDescription("The Lion King: The Gift", "2019 soundtrack album by Beyoncé");
+        } else {
+            SearchPageObject.waitForElementByTitleAndDescription("The Lion King", "1994 film");
+            SearchPageObject.waitForElementByTitleAndDescription("The Lion King (2019 film)", "2019 film by Jon Favreau");
+            SearchPageObject.waitForElementByTitleAndDescription("The Lion King: The Gift", "2019 soundtrack album by Beyoncé and various artists");
+        }
     }
 }
