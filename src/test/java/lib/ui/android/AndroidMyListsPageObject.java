@@ -1,7 +1,6 @@
 package lib.ui.android;
-
-import io.appium.java_client.AppiumDriver;
 import lib.ui.MyListsPageObject;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class AndroidMyListsPageObject extends MyListsPageObject {
 
@@ -10,7 +9,7 @@ public class AndroidMyListsPageObject extends MyListsPageObject {
         articleByTitleTPL = "xpath://*[@text='{title}']";
     }
 
-    public AndroidMyListsPageObject(AppiumDriver driver) {
+    public AndroidMyListsPageObject(RemoteWebDriver driver) {
         super(driver);
     }
 }

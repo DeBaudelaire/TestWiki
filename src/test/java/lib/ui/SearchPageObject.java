@@ -1,8 +1,5 @@
 package lib.ui;
-import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
-
-import java.rmi.Remote;
 
 abstract public class SearchPageObject extends MainPageObject {
 
@@ -90,5 +87,11 @@ abstract public class SearchPageObject extends MainPageObject {
 
         this.waitForElementPresent(searchResultTitleXpath,"Cannot find search result with title substring: " + title, 10);
         this.waitForElementPresent(searchResultDescriptionXpath,"Cannot find search result with description substring: " + description, 10);
+    }
+
+    public void waitForElementByTitle(String title) {
+        String searchResultTitleXpath = getResultSearchTitle(title);
+
+        this.waitForElementPresent(searchResultTitleXpath,"Cannot find search result with title substring: " + title, 10);
     }
 }

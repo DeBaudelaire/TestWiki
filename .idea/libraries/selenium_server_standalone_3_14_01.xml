@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="selenium-server-standalone-3.14.01">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../Desktop/a.chernaya_automation_43_lesson2/libs/selenium-server-standalone-3.14.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

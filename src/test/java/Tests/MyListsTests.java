@@ -11,7 +11,9 @@ import org.junit.Test;
 public class MyListsTests extends CoreTestCase  {
 
     private static final String
-            nameOfFolder = "Learning programming";
+            nameOfFolder = "Learning programming",
+            login = "lenorelenore",
+            password = "!Nag-8MxSM.seQ9";
 
 
     //Ex5: Тест: сохранение двух статей
@@ -21,7 +23,7 @@ public class MyListsTests extends CoreTestCase  {
     //3. Убеждается, что вторая осталась
     //4. Переходит в неё и убеждается, что title совпадает
     @Test
-    public void testToSaveTwoArticlesToMyList() {
+    public void testToSaveTwoArticlesToMyList() throws InterruptedException {
 
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchInput();
@@ -34,8 +36,20 @@ public class MyListsTests extends CoreTestCase  {
         //добавление в новый список закладок
         if (Platform.getInstance().isAndroid()) {
             ArticlePageObject.addArticleToNewList(nameOfFolder);
-        } else {
+        } else if (Platform.getInstance().isIOS()) {
             ArticlePageObject.addArticlesToMySaved();
+        } else if (Platform.getInstance().isMw()) {
+
+            ArticlePageObject.addArticlesToMySaved();
+
+            AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
+                Auth.clickAuthButton();
+                Auth.enterLoginData(login, password);
+                Auth.submitForm();
+
+                ArticlePageObject.waitForTitleElement();
+
+                assertEquals("We are not on the same page after login", articleTitle, ArticlePageObject.getArticleTitle());
         }
 
         if (Platform.getInstance().isIOS()) {
@@ -47,10 +61,15 @@ public class MyListsTests extends CoreTestCase  {
         //вторая статья
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.clickByArticleWithSubstring("Java version history");
+        if ((Platform.getInstance().isIOS()) || (Platform.getInstance().isAndroid())) {
+            SearchPageObject.clickByArticleWithSubstring("Java version history");
+        } else {
+            SearchPageObject.clickByArticleWithSubstring("List of versions of the Java programming language");
+        }
+
 
         //добавление в существующий список
-        if (Platform.getInstance().isIOS()) {
+         if (Platform.getInstance().isIOS()) {
             ArticlePageObject.waitForSecondTitleElement();
         } else if (Platform.getInstance().isAndroid()) {
             ArticlePageObject.waitForTitleElement();
@@ -66,6 +85,7 @@ public class MyListsTests extends CoreTestCase  {
 
         //закладки
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
+        NavigationUI.openNavigation();
         NavigationUI.clickMyLists();
         MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);
 
@@ -76,7 +96,10 @@ public class MyListsTests extends CoreTestCase  {
 
         MyListsPageObject.swipeByArticleToDelete(articleTitle);
 
-        SearchPageObject.waitForElementByTitleAndDescription("Java version history", "List of versions of the Java programming language");
-
+        if ((Platform.getInstance().isIOS()) || (Platform.getInstance().isAndroid())) {
+            SearchPageObject.waitForElementByTitleAndDescription("Java version history", "List of versions of the Java programming language");
+        } else {
+            SearchPageObject.waitForElementByTitle("Java version history");
+        }
     }
 }

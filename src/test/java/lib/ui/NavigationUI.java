@@ -1,16 +1,32 @@
 package lib.ui;
-import io.appium.java_client.AppiumDriver;
+import lib.Platform;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 abstract public class NavigationUI extends MainPageObject{
 
      protected  static String
-        myListsLink;
+        myListsLink,
+        openNavigation;
 
-    public NavigationUI(AppiumDriver driver) {
+    public NavigationUI(RemoteWebDriver driver) {
         super(driver);
     }
 
+    public void openNavigation() {
+        if (Platform.getInstance().isMw()) {
+            this.waitForElementAndClick(openNavigation, "Cannot find and click open navigation button", 10);
+        } else {
+            System.out.println("Method openNavigation () does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
+    }
+
     public void clickMyLists() {
-        this.waitForElementAndClick(myListsLink, "Cannot find my lists", 5);
+        {
+            if (Platform.getInstance().isMw()) {
+                this.tryClickElementWithFewAttempts(myListsLink, "Cannot find navigation button to My list", 5);
+            } else {
+                this.waitForElementAndClick(myListsLink, "Cannot find my lists", 5);
+            }
+        }
     }
 }

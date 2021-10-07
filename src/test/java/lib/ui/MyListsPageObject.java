@@ -1,13 +1,14 @@
 package lib.ui;
-import io.appium.java_client.AppiumDriver;
 import lib.Platform;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
-abstract public class MyListsPageObject extends MainPageObject{
+abstract public class MyListsPageObject extends MainPageObject {
 
     protected static String
             folderByNameTPL,
             articleByTitleTPL,
-            iosElementToDelete;
+            iosElementToDelete,
+            removeFromSavedButton;
 
     public static String getFolderXpathByName(String nameOfFolder) {
         return folderByNameTPL.replace("{folderName}", nameOfFolder);
@@ -17,8 +18,12 @@ abstract public class MyListsPageObject extends MainPageObject{
         return articleByTitleTPL.replace("{title}", articleTitle);
     }
 
-    public MyListsPageObject(AppiumDriver driver) {
-            super(driver);
+    public static String getRemoveButtonByTitle(String articleTitle) {
+        return removeFromSavedButton.replace("{title}", articleTitle);
+    }
+
+    public MyListsPageObject(RemoteWebDriver driver) {
+        super(driver);
     }
 
     public void openFolderByName(String nameOfFolder) {
@@ -40,12 +45,23 @@ abstract public class MyListsPageObject extends MainPageObject{
 
         this.waitForArticleToAppearByTitle(articleTitle);
         String articleXpath = getSavedArticleXpathByTitle(articleTitle);
-        this.swipeElementToLeft(articleXpath, "Cannot swipe article " + articleTitle);
 
-        if (Platform.getInstance().isIOS()) {
-            this.waitForElementAndClick(iosElementToDelete, "Cannot find saved article", 10);
+        if ((Platform.getInstance().isIOS()) || (Platform.getInstance().isAndroid())) {
+            this.swipeElementToLeft(articleXpath, "Cannot swipe article " + articleTitle);
+        } else {
+            String removeLocator = getRemoveButtonByTitle(articleTitle);
+            this.waitForElementAndClick(removeLocator, "Cannot click button to remove from saved", 10);
         }
 
-        this.waitForArticleToDisappear(articleTitle);
+            if (Platform.getInstance().isIOS()) {
+                this.waitForElementAndClick(iosElementToDelete, "Cannot find saved article", 10);
+            }
+
+            if (Platform.getInstance().isMw()) {
+                driver.navigate().refresh();
+            }
+
+            this.waitForArticleToDisappear(articleTitle);
+
     }
 }

@@ -1,7 +1,7 @@
 package lib.ui;
-import io.appium.java_client.AppiumDriver;
 import lib.Platform;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 abstract public class ArticlePageObject extends MainPageObject {
 
@@ -10,6 +10,7 @@ abstract public class ArticlePageObject extends MainPageObject {
             footerElement,
             optionsButton,
             optionsAddTiMyListButton,
+            optionsRemoveFromMyListButton,
             addToMyListOverlay,
             myListNameInput,
             myListOkButton,
@@ -18,7 +19,7 @@ abstract public class ArticlePageObject extends MainPageObject {
             goHome,
             secondTitle;
 
-    public ArticlePageObject(AppiumDriver driver) {
+    public ArticlePageObject(RemoteWebDriver driver) {
         super(driver);
     }
 
@@ -35,16 +36,20 @@ abstract public class ArticlePageObject extends MainPageObject {
 
         if (Platform.getInstance().isAndroid()) {
             return titleElement.getAttribute("text");
-        } else {
+        } else if (Platform.getInstance().isIOS()) {
             return titleElement.getAttribute("name");
+        } else {
+            return titleElement.getText();
         }
     }
 
     public void swipeToFooter() {
         if (Platform.getInstance().isAndroid()) {
             this.swipeUpToFindElement(footerElement, "Cannot find the end of article", 40);
-        } else {
+        } else if (Platform.getInstance().isIOS()) {
             this.swipeUpTillElementAppear(footerElement, "Cannot find the end of article", 40);
+        } else {
+            scrollWebPageTillElementNotVisible(footerElement, "Cannot find the end of article", 40);
         }
     }
 
@@ -67,7 +72,10 @@ abstract public class ArticlePageObject extends MainPageObject {
     }
 
     public void closeArticle() {
-        this.waitForElementAndClick(closeArticleButton, "Cannot find X button to close article", 5);
+        if ((Platform.getInstance().isIOS()) || (Platform.getInstance().isAndroid())) {
+            this.waitForElementAndClick(closeArticleButton, "Cannot find X button to close article", 5);
+        } else {
+         }
     }
 
     public void closeIOSPopUp() {
@@ -80,6 +88,16 @@ abstract public class ArticlePageObject extends MainPageObject {
     }
 
     public void addArticlesToMySaved() {
+        if (Platform.getInstance().isMw()) {
+            this.removeArticleFromSavedIfItAdded();
+        }
         this.waitForElementAndClick(optionsAddTiMyListButton, "Cannot find option to add article to reading list", 10);
+    }
+
+    public void removeArticleFromSavedIfItAdded() {
+        if (isElementPresent(optionsRemoveFromMyListButton)) {
+            this.waitForElementAndClick(optionsRemoveFromMyListButton, "Cannot click button to remove an article from saved", 10);
+            this.waitForElementPresent(optionsRemoveFromMyListButton, "Cannot find button to add an article to saved list after removing it from this list before", 10);
+        }
     }
 }

@@ -22,20 +22,26 @@ public class CoreTestCase extends TestCase {
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
 
-        AppiumServiceBuilder builder = new AppiumServiceBuilder()
-                .withAppiumJS(new File("/usr/local/lib/node_modules/appium/build/lib/main.js"))
-                .withArgument(GeneralServerFlag.LOG_LEVEL, "info")
-                .usingPort(4723)
-                .withIPAddress("127.0.0.1");
-        AppiumDriverLocalService.buildService(builder).start();
+        if ((Platform.getInstance().isAndroid()) || (Platform.getInstance().isIOS())) {
 
-        capabilities.setCapability("wdaBaseUrl", "10.25.173.28");
-        capabilities.setCapability("wdaLocalPort", "8100");
+            AppiumServiceBuilder builder = new AppiumServiceBuilder()
+                    .withAppiumJS(new File("/usr/local/lib/node_modules/appium/build/lib/main.js"))
+                    .withArgument(GeneralServerFlag.LOG_LEVEL, "info")
+                    .usingPort(4723)
+                    .withIPAddress("127.0.0.1");
+            AppiumDriverLocalService.buildService(builder).start();
+
+            capabilities.setCapability("wdaBaseUrl", "10.25.173.28");
+            capabilities.setCapability("wdaLocalPort", "8100");
+        }
 
         super.setUp();
         driver = Platform.getInstance().getDriver();
-        this.rotateScreenPortrait();
+        if ((Platform.getInstance().isAndroid()) || (Platform.getInstance().isIOS())) {
+            this.rotateScreenPortrait();
+        }
         this.skipWelcomePageForIOSApp();
+        this.openWikiWebPageForMobileWeb();
     }
 
     @Override
@@ -69,7 +75,16 @@ public class CoreTestCase extends TestCase {
             driver.runAppInBackground(Duration.ofSeconds(seconds));
         } else {
         System.out.println("Method backgroundApp() does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
     }
+
+
+    protected void openWikiWebPageForMobileWeb() {
+        if (Platform.getInstance().isMw()) {
+            driver.get("https://en.m.wikipedia.org");
+        } else {
+            System.out.println("Method openWikiWebPageForMobileWeb() does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
     }
 
     private void skipWelcomePageForIOSApp() {

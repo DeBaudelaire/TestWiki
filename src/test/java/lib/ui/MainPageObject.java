@@ -1,4 +1,5 @@
 package lib.ui;
+import com.gargoylesoftware.htmlunit.javascript.background.JavaScriptExecutor;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
@@ -14,6 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.lang.Object;
 
 public class MainPageObject {
 
@@ -72,8 +74,31 @@ public class MainPageObject {
         }
     }
 
-    public  void swipeUpQuick() {
+    public void swipeUpQuick() {
         swipeUp(200);
+    }
+
+    public void scrollWebPageUp() {
+        if (Platform.getInstance().isMw()) {
+            JavaScriptExecutor JSExecuter = (JavaScriptExecutor) driver;
+            driver.executeScript("window.scrollBy(0, 250)");
+        } else {
+            System.out.println("Method scrollWebPageUp() does nothing for platform " + Platform.getInstance().getPlatformVar());
+        }
+    }
+
+    public void scrollWebPageTillElementNotVisible(String locator, String error_message, int maxSwipes) {
+        int alreadySwiped = 0;
+
+        WebElement element = this.waitForElementPresent(locator, error_message, 30);
+
+        while (!this.isElementLocatedOnTheScreen(locator)) {
+            scrollWebPageUp();
+            ++alreadySwiped;
+            if (alreadySwiped > maxSwipes) {
+                Assert.assertTrue(error_message, element.isDisplayed());
+            }
+        }
     }
 
     public void swipeUpToFindElement(String locator, String error_message, int max_swipes) {
@@ -102,6 +127,10 @@ public class MainPageObject {
 
     public boolean isElementLocatedOnTheScreen(String locator) {
         int elementLocationByY = this.waitForElementPresent(locator, "Cannot find element by locator", 10).getLocation().getY();
+        if (Platform.getInstance().isMw()) {
+            Object jsResult = driver.executeScript("return window.pageYOffset");
+            elementLocationByY -=  Integer.parseInt(jsResult.toString());
+        }
         int screenSizeByY = driver.manage().window().getSize().getHeight();
         return elementLocationByY < screenSizeByY;
     }
@@ -165,6 +194,27 @@ public class MainPageObject {
         By by = getLocatorByString(locator);
         List elements = driver.findElements(by);
         return elements.size();
+    }
+
+    public boolean isElementPresent(String locator) {
+        return getAmountOfElements(locator) > 0;
+    }
+
+    public void tryClickElementWithFewAttempts(String locator, String error_message, long amount_of_attempts) {
+        int currentAttempts = 0;
+        boolean needMoreAttempts = true;
+
+        while (needMoreAttempts) {
+            try {
+                this.waitForElementAndClick(locator, error_message, 5);
+                needMoreAttempts = false;
+            } catch (Exception e) {
+                if (currentAttempts > amount_of_attempts) {
+                    this.waitForElementAndClick(locator, error_message, 5);
+                }
+            }
+            ++currentAttempts;
+        }
     }
 
     public void assertElementNotPresent(String locator, String error_message, long timeoutInSeconds) {
