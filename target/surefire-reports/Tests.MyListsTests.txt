@@ -1,0 +1,15 @@
+-------------------------------------------------------------------------------
+Test set: Tests.MyListsTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 28.475 s <<< FAILURE! - in Tests.MyListsTests
+testToSaveTwoArticlesToMyList(Tests.MyListsTests)  Time elapsed: 28.469 s  <<< ERROR!
+org.openqa.selenium.TimeoutException: 
+Expected condition failed: We see deleted article
+ (tried for 10 second(s) with 500 milliseconds interval)
+Build info: version: '3.12.0', revision: '7c6e0b3', time: '2018-05-08T14:04:26.12Z'
+System info: host: 'MacBook-Air-Anna-2.local', ip: 'fe80:0:0:0:1060:648b:6dc5:9f35%en0', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '11.5.1', java.version: '17'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 94.0.4606.81, chrome: {chromedriverVersion: 94.0.4606.61 (418b78f5838ed..., userDataDir: /var/folders/nw/qchspymd0n9...}, goog:chromeOptions: {debuggerAddress: localhost:52251}, javascriptEnabled: true, networkConnectionEnabled: false, pageLoadStrategy: normal, platform: MAC, platformName: MAC, proxy: Proxy(), setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+Session ID: c41a208deed7dcaf01855a649db3fe20
+	at Tests.MyListsTests.testToSaveTwoArticlesToMyList(MyListsTests.java:98)
+

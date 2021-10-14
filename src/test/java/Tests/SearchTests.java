@@ -3,6 +3,7 @@ import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.SearchPageObjectFactory;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class SearchTests extends CoreTestCase {
@@ -41,7 +42,7 @@ public class SearchTests extends CoreTestCase {
         String searchLine = "Linkin Park discography";
         SearchPageObject.typeSearchLine(searchLine);
         int amountOfSearchResults = SearchPageObject.getAmountOfFoundArticles();
-        assertTrue("We found too few results!", amountOfSearchResults > 0);
+        Assert.assertTrue("We found too few results!", amountOfSearchResults > 0);
     }
 
     @Test

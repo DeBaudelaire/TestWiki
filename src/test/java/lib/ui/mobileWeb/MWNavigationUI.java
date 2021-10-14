@@ -1,5 +1,4 @@
 package lib.ui.mobileWeb;
-
 import lib.ui.NavigationUI;
 import org.openqa.selenium.remote.RemoteWebDriver;
 

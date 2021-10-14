@@ -1,0 +1,17 @@
+-------------------------------------------------------------------------------
+Test set: Tests.SearchTests
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 28.769 s <<< FAILURE! - in Tests.SearchTests
+testCancelSearch(Tests.SearchTests)  Time elapsed: 9.544 s  <<< ERROR!
+org.openqa.selenium.TimeoutException: 
+Expected condition failed: Cannot find and click search cancel button
+ (tried for 5 second(s) with 500 milliseconds interval)
+	at Tests.SearchTests.testCancelSearch(SearchTests.java:34)
+Caused by: org.openqa.selenium.NoSuchElementException: 
+Cannot locate an element using By.cssSelector: div>button.cancel
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.12.0', revision: '7c6e0b3', time: '2018-05-08T14:04:26.12Z'
+System info: host: 'MacBook-Air-Anna-2.local', ip: 'fe80:0:0:0:1060:648b:6dc5:9f35%en0', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '11.5.1', java.version: '17'
+Driver info: driver.version: unknown
+	at Tests.SearchTests.testCancelSearch(SearchTests.java:34)
+
