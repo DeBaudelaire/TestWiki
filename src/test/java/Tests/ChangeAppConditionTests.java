@@ -1,4 +1,6 @@
 package Tests;
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.ArticlePageObject;
@@ -8,9 +10,15 @@ import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
+@Epic("Tests for articles")
 public class ChangeAppConditionTests extends CoreTestCase {
 
     @Test
+    @Features(value = {@Feature(value = "Search"), @Feature(value = "Article")})
+    @DisplayName("Check search article in background")
+    @Description("We search article and make sure the title is expected in background")
+    @Step("Starting test testCheckSearchArticleInBackground")
+    @Severity(value = SeverityLevel.MINOR)
     public void testCheckSearchArticleInBackground() {
 
         if (Platform.getInstance().isMw()) {
@@ -29,6 +37,11 @@ public class ChangeAppConditionTests extends CoreTestCase {
     //Как нам сделать так, чтобы после теста на поворот экрана сам экран всегда оказывался в правильном положении, даже если тест упал в тот момент, когда экран был наклонен?
 
     @Test
+    @Features(value = {@Feature(value = "Search"), @Feature(value = "Article")})
+    @DisplayName("Check article title after change screen orientation")
+    @Description("We search article, change screen orientation and make sure the title is expected")
+    @Step("Starting test testChangeScreenOrientationOnSearchResults")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testChangeScreenOrientationOnSearchResults() {
 
         if (Platform.getInstance().isMw()) {

@@ -1,4 +1,6 @@
 package Tests;
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.*;
@@ -9,6 +11,7 @@ import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
+@Epic("Tests for articles")
 public class MyListsTests extends CoreTestCase  {
 
     private static final String
@@ -24,6 +27,11 @@ public class MyListsTests extends CoreTestCase  {
     //3. Убеждается, что вторая осталась
     //4. Переходит в неё и убеждается, что title совпадает
     @Test
+    @Features(value = {@Feature(value = "Search"), @Feature(value = "Article")})
+    @DisplayName("Save two articles to my list")
+    @Description("We search two articles, add to list, delete one and make sure the remaining title is expected")
+    @Step("Starting test testToSaveTwoArticlesToMyList")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testToSaveTwoArticlesToMyList() throws InterruptedException {
 
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
